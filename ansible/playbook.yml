@@ -7,6 +7,6 @@
     - name: Establish login to ECR
       shell: aws ecr get-login-password --region ap-northeast-1 | docker login --username AWS --password-stdin 221968583774.dkr.ecr.ap-northeast-1.amazonaws.com
     - name: Pull image from ECR
-      shell: docker pull 221968583774.dkr.ecr.ap-northeast-1.amazonaws.com/springbootapp:"$BUILD_NUMBER"
+      shell: docker pull 221968583774.dkr.ecr.ap-northeast-1.amazonaws.com/springbootapp:"{{ BUILD_NUMBER }}"
     - name: Run image
-      shell: docker run --name web -p 8080:8080 -d 221968583774.dkr.ecr.ap-northeast-1.amazonaws.com/springbootapp:"$BUILD_NUMBER"
+      shell: docker run --name web -p 8080:8080 -d 221968583774.dkr.ecr.ap-northeast-1.amazonaws.com/springbootapp:"{{ BUILD_NUMBER }}"
