@@ -1,3 +1,4 @@
+# code: language=ansible
 ---
 - name: deploy to CD server
   hosts: web
@@ -9,14 +10,21 @@
   # AWS ECR Actions
     - name: Establish login to ECR
       shell: aws ecr get-login-password --region ap-northeast-1 | docker login --username AWS --password-stdin "{{ DOCKER_REGISTRY }}"
+      register: ecr_login_output
+
+    - name: Check login status (optional)
+      debug:
+        msg: "ECR login output: {{ ecr_login_output.stdout }}"
+      
     - name: Pull image from ECR
       docker_image:
-        name: "{{ DOCKER_REGISTRY }}"/"{{ DOCKER_IMAGE }}":"{{ BUILD_NUMBER }}"
+        name: "{{ DOCKER_REGISTRY }}/{{ DOCKER_IMAGE }}:{{ BUILD_NUMBER }}"
         source: pull
+
     - name: Run container
       docker_container:
         name: web
-        image: "{{ DOCKER_REGISTRY }}"/"{{ DOCKER_IMAGE }}":"{{ BUILD_NUMBER }}"
+        image: "{{ DOCKER_REGISTRY }}/{{ DOCKER_IMAGE }}:{{ BUILD_NUMBER }}"
         exposed_ports:
           - 8080
         state: present
