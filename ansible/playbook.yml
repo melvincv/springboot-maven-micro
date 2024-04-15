@@ -7,6 +7,11 @@
     DOCKER_REGISTRY: "221968583774.dkr.ecr.ap-northeast-1.amazonaws.com"
     DOCKER_IMAGE: "springbootapp"
   tasks:
+    - name: Install python3-docker
+      apt:
+        name: python3-docker
+        state: present
+        
   # AWS ECR Actions
     - name: Establish login to ECR
       shell: aws ecr get-login-password --region ap-northeast-1 | docker login --username AWS --password-stdin "{{ DOCKER_REGISTRY }}"
